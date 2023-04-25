@@ -12,10 +12,11 @@ const Row = ({ rowId, title, fetchURL }: Props) => {
 
   useEffect(() => {
     axios.get(fetchURL).then((response) => {
+      console.log(response);
       setMovies(response.data);
     });
   }, [fetchURL]);
-
+  console.log(movies);
   const slideLeft = () => {
     var slider = document.getElementById("slider" + rowId) as HTMLElement;
     slider.scrollLeft = slider.scrollLeft - 500;

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../сomponents/Navbar";
 import axios from "axios";
-import img from "./../assets/image 2.png";
-// const axios = require('axios');
+import Row from "../сomponents/Row";
 
 const Home = () => {
   const [movie, setMovie] = useState<any>();
@@ -17,14 +15,6 @@ const Home = () => {
   };
   return (
     <>
-      <img
-        className="hidden sm:block absolute w-full h-full object-cover"
-        src={img}
-        alt="logo"
-      />
-      <div className="z-5 bg-black/60 fixed top-0 left-0 w-full h-screen"></div>
-
-      <Navbar />
       <div className="bg-black/40 backdrop-blur-sm pb-4 h-[80%] rounded-2xl ml-[16px] mr-[16px]">
         <div className="flex flex-col justify-center sm:flex-row h-full pt-6 pl-6 pr-6">
           <div className="flex justify-center min-w-[160px] sm:min-w-[260px]">
@@ -41,6 +31,13 @@ const Home = () => {
             </p>
           </div>
         </div>
+      </div>
+      <div className="bg-black/60 rounded-2xl relative ml-12 mr-12 pl-2 pr-2 mt-8 mb-8">
+        <Row
+          rowId={"1"}
+          title={"Последние изменения"}
+          fetchURL={"https://api.anilibria.tv/v2/getChanges?limit=10"}
+        />
       </div>
     </>
   );
