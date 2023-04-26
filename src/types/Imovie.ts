@@ -1,4 +1,4 @@
-export type Imovie = {
+export interface Imovie {
   id: number;
   description: string;
   names: { ru: string; en: string };
@@ -9,6 +9,12 @@ export type Imovie = {
   };
   player: {
     host: string;
-    alternative_player: string;
+    playlist: playlists[];
   };
-};
+}
+interface playlists {
+  hls: {
+    hd: string;
+  };
+  preview: string;
+}
