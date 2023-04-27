@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Imovie } from "../types/Imovie";
 import { VideoJS } from "../utils/VideoJs";
+import Select from "react-select";
 
 const Anime = () => {
   const location = useLocation();
   const [movie, setMovie] = useState<Imovie>();
-  const [value, setValue] = useState<any>("1");
+  const [value, setValue] = useState<any>({ value: "1", label: "1" });
 
   const playerRef = React.useRef(null);
 
@@ -18,7 +19,9 @@ const Anime = () => {
     fluid: true,
     sources: [
       {
-        src: `https://${movie?.player.host}${movie?.player.playlist[value].hls.hd}`,
+        src: `https://${movie?.player.host}${
+          movie?.player.playlist[value.value].hls.hd
+        }`,
         type: "application/x-mpegURL",
       },
     ],
@@ -28,24 +31,14 @@ const Anime = () => {
     playerRef.current = player;
   };
 
-  const play = {
-    fill: true,
-    fluid: true,
-    autoplay: true,
-    controls: true,
-    preload: "metadata",
-    sources: [
-      {
-        src: `https://${movie?.player.host}${movie?.player.playlist[value].hls.hd}`,
-        type: "application/x-mpegURL",
-      },
-    ],
-  };
   let playlist: any;
+  let options: any[] = [];
   if (movie) {
     playlist = Object.keys(movie.player.playlist);
+    playlist.map((list: any) => options.push({ value: list, label: list }));
   }
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  console.log(options);
+  const handleChange = (e: any) => {
     setValue(e.target.value);
   };
   useEffect(() => {
@@ -78,18 +71,29 @@ const Anime = () => {
               </div>
               <div className="pl-4 flex flex-col justify-end text-white">
                 <p className="font-bold pb-4">{movie?.names.ru}</p>
-                <p className="font-light w-full md:mx-w-[70%] lg:max-w-[50%] xl:max-w-[35%] text-gray-200">
+                <p className="font-light w-full  text-gray-200">
                   {movie?.description}
                 </p>
               </div>
             </div>
             {playlist.at(-1) ? (
               <div className="p-6">
-                <select value={value} onChange={handleChange}>
-                  {playlist.map((list: any) => (
-                    <option value={list}>{list} серия</option>
-                  ))}
-                </select>
+                <Select
+                  className="w-[100px] bg-black"
+                  options={options}
+                  value={value}
+                  onChange={setValue}
+                  theme={(theme) => ({
+                    ...theme,
+                    borderRadius: 0,
+
+                    colors: {
+                      ...theme.colors,
+                      primary: "black",
+                    },
+                  })}
+                />
+
                 <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
               </div>
             ) : (
