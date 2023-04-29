@@ -37,7 +37,7 @@ const Anime = () => {
     playlist = Object.keys(movie.player.playlist);
     playlist.map((list: any) => options.push({ value: list, label: list }));
   }
-  console.log(options);
+
   const handleChange = (e: any) => {
     setValue(e.target.value);
   };
