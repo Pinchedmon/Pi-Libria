@@ -26,7 +26,7 @@ function Navbar() {
           <Link to="collection">
             <button className="text-[#00FFC2] pr-6">Коллекция</button>
           </Link>
-          <Link to="signin">
+          <Link to="signup">
             <button className="text-[#00FFC2] pr-6">Зарегистрироваться</button>
           </Link>
           <Link to="login">
