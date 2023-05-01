@@ -1,19 +1,23 @@
 import React, { useState } from "react";
 import { UserAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { SmartCaptcha } from "@yandex/smart-captcha";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { user, logIn } = UserAuth();
+  const [token, setToken] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await logIn(email, password);
-      navigate("/");
+      if (token !== "") {
+        await logIn(email, password);
+        navigate("/");
+      }
     } catch (error: any) {
       console.log(error);
       setError(error.message);
@@ -22,7 +26,7 @@ const Login = () => {
   return (
     <>
       <div className="w-full h-full relative">
-        <div className="fixed w-full px-4 py-24 z-50">
+        <div className=" w-full px-4 py-4 z-50">
           <div className="max-w-[450px] h-[600px] mx-auto bg-black/75 text-white">
             <div className="max-w-[320px] mx-auto py-16">
               <h1 className="text-3xl font-bold">Вход</h1>
@@ -44,19 +48,17 @@ const Login = () => {
                   placeholder="Passowrd"
                   autoComplete="current-password"
                 />
-                <button className="bg-green-600 py-3 my-6 rounded font-bold">
+                <SmartCaptcha
+                  sitekey="ysc1_Dx8ZXQ4dBZQLoz0biaUHXsrUe3ypYNQxpX0tcIimf812f6eb"
+                  onSuccess={setToken}
+                />
+                <button className="bg-yellow-600 cursor-pointer sm:bg-[#00FFC2] text-black py-3 my-6 rounded font-bold">
                   Войти
                 </button>
-                <div className="flex justify-between items-center text-sm text-gray-600">
-                  <p>
-                    <input className="mr-2" type="checkbox" />
-                    Запомнить меня
-                  </p>
-                  <p>Нужна помощь?</p>
-                </div>
-                <p className="py-8">
+
+                <p>
                   <span className="text-gray-600">Новенький?</span>
-                  <Link to="/signup">Зарегистрироваться</Link>
+                  <Link to="/signup"> Зарегистрироваться</Link>
                 </p>
               </form>
             </div>

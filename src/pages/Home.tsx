@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Row from "../сomponents/Row";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+
+import { EffectCoverflow, Pagination } from "swiper";
+import Movie from "../сomponents/Movie";
 
 const Home = () => {
   const [movie, setMovie] = useState<any>();
+  const [movies, setMovies] = useState([]);
   useEffect(() => {
     axios.get(`https://api.anilibria.tv/v2/getRandomTitle`).then((response) => {
       setMovie(response.data);
-      console.log(movie);
     });
+    axios
+      .get(`https://api.anilibria.tv/v2/getChanges?limit=10`)
+      .then((response) => {
+        setMovies(response.data);
+      });
   }, []);
   const SliceDesc = (text: string, n: number) => {
     return text?.slice(0, n) + "...";
@@ -32,12 +45,31 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="bg-black/60 rounded-2xl relative ml-12 mr-12 pl-2 pr-2 mt-8 mb-8">
-        <Row
-          rowId={"1"}
-          title={"Последние изменения"}
-          fetchURL={"https://api.anilibria.tv/v2/getChanges?limit=10"}
-        />
+      <div className=" sm:bg-black/60 rounded-2xl relative sm:mr-6 sm:ml-6 pl-2 pr-2 mt-8 mb-8">
+        <Swiper
+          effect={"coverflow"}
+          grabCursor={true}
+          centeredSlides={true}
+          slidesPerView={"auto"}
+          coverflowEffect={{
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows: true,
+          }}
+          pagination={true}
+          modules={[EffectCoverflow, Pagination]}
+          className="w-full "
+        >
+          {movies.map((movie: any, index) => (
+            <>
+              <SwiperSlide key={index} className={`w-[200px] sm:w-[300px] `}>
+                <Movie item={movie} />
+              </SwiperSlide>
+            </>
+          ))}
+        </Swiper>
       </div>
     </>
   );

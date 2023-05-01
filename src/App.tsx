@@ -8,6 +8,7 @@ import Collection from "./pages/Collection";
 import { AuthContextProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import "semantic-ui-css/semantic.min.css";
 function App() {
   return (
     <div className="w-full h-full">
@@ -16,7 +17,7 @@ function App() {
         src={img}
         alt="logo"
       />
-      <div className="z-5 bg-black/60 fixed top-0 left-0 w-full h-screen"></div>
+      <div className="z-5 bg-purple-700 sm:bg-black/50 fixed top-0 left-0 w-full h-screen"></div>
       <AuthContextProvider>
         <Navbar />
         <Routes>

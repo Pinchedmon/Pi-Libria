@@ -33,33 +33,31 @@ const Collection = () => {
     }
   }, [selectedGenre]);
   return (
-    <div className="relative h-full ">
+    <div className="relative h-full  ">
       <Swiper
-        slidesPerView={5}
-        spaceBetween={30}
+        slidesPerView={window.screen.width > 700 ? 5 : 3}
+        spaceBetween={5}
         freeMode={true}
-        pagination={{
-          clickable: true,
-        }}
-        modules={[FreeMode, Pagination]}
-        className="w-full h-[100px] bg-purple-400/10 "
+        modules={[FreeMode]}
+        className="w-full h-full py-4 bg-purple-400/10 "
       >
         {genres.map((item: any, index) => (
           <SwiperSlide
             onClick={() => setSelectedGenre(item)}
             key={index}
-            className="cursor-pointer flex h-[50px ]justify-center text-white items-center"
+            className=" border text-sm border-white rounded-xl  cursor-pointer flex justify-center text-white items-center"
           >
             {item}
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="flex"></div>
-      {movies.map((movie: any, index) => (
-        <>
-          <Movie item={movie} />
-        </>
-      ))}
+      <div className="flex flex-wrap justify-center">
+        {movies.map((movie: any, index) => (
+          <>
+            <Movie item={movie} />
+          </>
+        ))}
+      </div>
     </div>
   );
 };
