@@ -13,7 +13,7 @@ const Anime = () => {
   const playerRef = React.useRef(null);
 
   const videoJsOptions = {
-    autoplay: true,
+    autoplay: false,
     controls: true,
     responsive: true,
     fluid: true,
@@ -60,11 +60,11 @@ const Anime = () => {
     <div className="relative">
       {movie && (
         <>
-          <div className="bg-black/40 backdrop-blur-sm pb-4 h-[80%] rounded-2xl ml-[16px] mr-[16px]">
+          <div className="bg-black/40 backdrop-blur-sm pb-4  border border-black ml-[16px] mr-[16px]">
             <div className="flex flex-col justify-center sm:flex-row h-full pt-6 pl-6 pr-6">
               <div className="flex justify-center min-w-[160px] sm:min-w-[260px]">
                 <img
-                  className="min-w-[160px] rounded-xl"
+                  className="min-w-[160px] mb-6 sm:mb-0 rounded-xl shadow-sm sm:shadow-3xl shadow-white"
                   alt="anime"
                   src={`https://dl-20211030-963.anilib.top/${movie?.posters.medium.url}`}
                 />

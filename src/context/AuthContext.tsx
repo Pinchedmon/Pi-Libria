@@ -26,6 +26,7 @@ export function AuthContextProvider({ children }: any) {
   }
 
   function logIn(email: string, password: string) {
+    console.log(user);
     return signInWithEmailAndPassword(auth, email, password);
   }
 
@@ -36,6 +37,7 @@ export function AuthContextProvider({ children }: any) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
       setUser(currentUser);
+      console.log(user);
     });
     return () => {
       unsubscribe();

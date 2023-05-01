@@ -8,7 +8,8 @@ import Collection from "./pages/Collection";
 import { AuthContextProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import "semantic-ui-css/semantic.min.css";
+import Account from "./pages/Account";
+
 function App() {
   return (
     <div className="w-full h-full">
@@ -23,9 +24,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/collection" element={<Collection />} />
-          <Route path="/anime*" element={<Anime />} />
+          <Route path="/anime" element={<Anime />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
       </AuthContextProvider>
     </div>

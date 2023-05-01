@@ -1,8 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* body {
-  background-image: url("./assets/image 2.png");
-  backgroung: rgba(0, 0, 0, 0.2);
-} */
+body {
+  font-family: "Roboto Mono", monospace;
+}

@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 
-import { EffectCoverflow, Pagination } from "swiper";
+import { EffectCoverflow } from "swiper";
 import Movie from "../сomponents/Movie";
 
 const Home = () => {
@@ -28,11 +28,11 @@ const Home = () => {
   };
   return (
     <>
-      <div className="bg-black/40 backdrop-blur-sm pb-4 h-[80%] rounded-2xl ml-[16px] mr-[16px]">
+      <div className="bg-black/40 backdrop-blur-sm border border-black pb-4 h-[80%]  ml-[16px] mr-[16px]">
         <div className="flex flex-col justify-center sm:flex-row h-full pt-6 pl-6 pr-6">
           <div className="flex justify-center min-w-[160px] sm:min-w-[260px]">
             <img
-              className="min-w-[160px] rounded-xl"
+              className="min-w-[160px] mb-[16px] sm:mb-0 shadow-sm sm:shadow-3xl shadow-white"
               alt="anime"
               src={`https://dl-20211030-963.anilib.top/${movie?.posters.medium.url}`}
             />
@@ -45,7 +45,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className=" sm:bg-black/60 rounded-2xl relative sm:mr-6 sm:ml-6 pl-2 pr-2 mt-8 mb-8">
+      <div className="  relative sm:mr-6 sm:ml-6 pl-2 pr-2 mt-8 mb-8">
         <Swiper
           effect={"coverflow"}
           grabCursor={true}
@@ -58,16 +58,13 @@ const Home = () => {
             modifier: 1,
             slideShadows: true,
           }}
-          pagination={true}
-          modules={[EffectCoverflow, Pagination]}
+          modules={[EffectCoverflow]}
           className="w-full "
         >
           {movies.map((movie: any, index) => (
-            <>
-              <SwiperSlide key={index} className={`w-[200px] sm:w-[300px] `}>
-                <Movie item={movie} />
-              </SwiperSlide>
-            </>
+            <SwiperSlide key={index} className={`w-[200px] sm:w-[300px] `}>
+              <Movie item={movie} />
+            </SwiperSlide>
           ))}
         </Swiper>
       </div>

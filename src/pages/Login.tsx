@@ -56,7 +56,7 @@ const Login = () => {
                   Войти
                 </button>
 
-                <p>
+                <p className="py-2">
                   <span className="text-gray-600">Новенький?</span>
                   <Link to="/signup"> Зарегистрироваться</Link>
                 </p>
