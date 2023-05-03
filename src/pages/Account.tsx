@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { UserAuth } from "../context/AuthContext";
+import { getDocs, collection } from "firebase/firestore";
+import { db } from "../firebase";
 
 const Account = () => {
-  const { user, logOut } = UserAuth();
-  console.log(user);
+  const { user } = UserAuth();
+  const [data, setData] = useState<any>();
+  const getCollection = async () => {
+    const citiesRef = collection(db, "users");
+    const docsSnap = await getDocs(citiesRef);
+    docsSnap.forEach((doc) => {
+      setData(doc.data());
+    });
+  };
+  useEffect(() => {
+    getCollection();
+  }, []);
+  console.log(data);
 
   return (
     <div className="relative">
@@ -13,9 +26,22 @@ const Account = () => {
             <div className="font-bold text-2xl text-black">
               Аккаунт: {user.email}
             </div>
-            <div className="text-gray-200 ">Просмотрено: 0</div>
-            <div className="text-gray-200">Отложено: 0</div>
-            <div className="text-gray-200">В любимых: 0</div>
+            {data ? (
+              <>
+                {" "}
+                <div className="text-gray-200 ">
+                  Просмотрено: {Object.keys(data.watchedShows).length}
+                </div>
+                <div className="text-gray-200">
+                  Отложено: {Object.keys(data.futureShows).length}
+                </div>
+                <div className="text-gray-200">
+                  В любимых: {Object.keys(data.likedShows).length}
+                </div>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         </div>
 

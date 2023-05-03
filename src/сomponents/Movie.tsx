@@ -14,9 +14,11 @@ const Movie = ({ item }: props) => {
   const navigate = useNavigate();
   const { user } = UserAuth();
   const movieId = doc(db, "users", `${user?.email}`);
+
   const likeShow = async () => {
     if (user?.email) {
       setLike(!like);
+
       !like
         ? await updateDoc(movieId, {
             likedShows: arrayUnion({

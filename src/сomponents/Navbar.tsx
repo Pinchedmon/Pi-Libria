@@ -14,7 +14,7 @@ function Navbar() {
       console.log(err);
     }
   };
-  console.log(user);
+
   return (
     <>
       <nav className="relative flex items-center justify-between flex-wrap p-4">
