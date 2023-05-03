@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "./../firebase";
+import { auth, db } from "./../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-// import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 type context = {
   signUp: () => void;
   logIn: () => void;
@@ -20,13 +20,14 @@ export function AuthContextProvider({ children }: any) {
 
   function signUp(email: string, password: string) {
     createUserWithEmailAndPassword(auth, email, password);
-    // setDoc(doc(db, "users", email), {
-    //   savedShows: [],
-    // });
+    setDoc(doc(db, "users", email), {
+      watchedShows: [],
+      likedShows: [],
+      futureShows: [],
+    });
   }
 
   function logIn(email: string, password: string) {
-    console.log(user);
     return signInWithEmailAndPassword(auth, email, password);
   }
 
@@ -37,7 +38,6 @@ export function AuthContextProvider({ children }: any) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
       setUser(currentUser);
-      console.log(user);
     });
     return () => {
       unsubscribe();

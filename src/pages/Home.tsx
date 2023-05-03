@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 
 import { EffectCoverflow } from "swiper";
 import Movie from "../сomponents/Movie";
+import { useNavigate } from "react-router";
 
 const Home = () => {
   const [movie, setMovie] = useState<any>();
@@ -26,6 +27,7 @@ const Home = () => {
   const SliceDesc = (text: string, n: number) => {
     return text?.slice(0, n) + "...";
   };
+  const navigate = useNavigate();
   return (
     <>
       <div className="bg-black/40 backdrop-blur-sm border border-black pb-4 h-[80%]  ml-[16px] mr-[16px]">
@@ -34,6 +36,7 @@ const Home = () => {
             <img
               className="min-w-[160px] mb-[16px] sm:mb-0 shadow-sm sm:shadow-3xl shadow-white"
               alt="anime"
+              onClick={() => navigate(`/anime?id=${movie?.id}`)}
               src={`https://dl-20211030-963.anilib.top/${movie?.posters.medium.url}`}
             />
           </div>
