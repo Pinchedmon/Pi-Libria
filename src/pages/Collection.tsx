@@ -1,16 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-// Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
-
-// import required modules
-import { FreeMode, Pagination } from "swiper";
+import { FreeMode } from "swiper";
 import Movie from "../сomponents/Movie";
+
 const Collection = () => {
   const [genres, setGenres] = useState([]);
   const [movies, setMovies] = useState([]);

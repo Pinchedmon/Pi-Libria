@@ -4,13 +4,20 @@ import { useLocation } from "react-router-dom";
 import { Imovie } from "../types/Imovie";
 import { VideoJS } from "../utils/VideoJs";
 import Select from "react-select";
+import { UserAuth } from "../context/AuthContext";
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const Anime = () => {
+  const { user } = UserAuth();
   const location = useLocation();
   const [movie, setMovie] = useState<Imovie>();
   const [value, setValue] = useState<any>({ value: "1", label: "1" });
-
+  const [like, setLike] = useState(false);
+  const [future, setFuture] = useState(false);
+  const [watched, setWatched] = useState(false);
   const playerRef = React.useRef(null);
+  const movieId = doc(db, "users", `${user?.email}`);
 
   const videoJsOptions = {
     autoplay: false,
@@ -37,10 +44,67 @@ const Anime = () => {
     playlist = Object.keys(movie.player.playlist);
     playlist.map((list: any) => options.push({ value: list, label: list }));
   }
-
-  const handleChange = (e: any) => {
-    setValue(e.target.value);
+  const likedShow = async () => {
+    if (user?.email) {
+      setLike(!like);
+      !like
+        ? await updateDoc(movieId, {
+            likedShows: arrayUnion({
+              id: movie?.id,
+              title: movie?.names.ru,
+              img: movie?.posters.medium.url,
+            }),
+          })
+        : await updateDoc(movieId, {
+            likedShows: arrayRemove({
+              id: movie?.id,
+              title: movie?.names.ru,
+              img: movie?.posters.medium.url,
+            }),
+          });
+    }
   };
+  const watchedShow = async () => {
+    if (user?.email) {
+      setWatched(!watched);
+      !watched
+        ? await updateDoc(movieId, {
+            watchedShows: arrayUnion({
+              id: movie?.id,
+              title: movie?.names.ru,
+              img: movie?.posters.medium.url,
+            }),
+          })
+        : await updateDoc(movieId, {
+            watchedShows: arrayRemove({
+              id: movie?.id,
+              title: movie?.names.ru,
+              img: movie?.posters.medium.url,
+            }),
+          });
+    }
+  };
+  const futureShow = async () => {
+    if (user?.email) {
+      setFuture(!future);
+      !future
+        ? await updateDoc(movieId, {
+            futureShows: arrayUnion({
+              id: movie?.id,
+              title: movie?.names.ru,
+              img: movie?.posters.medium.url,
+            }),
+          })
+        : await updateDoc(movieId, {
+            futureShows: arrayRemove({
+              id: movie?.id,
+              title: movie?.names.ru,
+              img: movie?.posters.medium.url,
+            }),
+          });
+    }
+  };
+
   useEffect(() => {
     axios
       .get(
@@ -53,9 +117,7 @@ const Anime = () => {
         setMovie(response.data);
       });
   }, []);
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
+
   return (
     <div className="relative">
       {movie && (
@@ -75,6 +137,38 @@ const Anime = () => {
                   {movie?.description}
                 </p>
               </div>
+            </div>
+            <div className="p-6">
+              <button
+                onClick={likedShow}
+                className={`p-2 mr-2 ${
+                  like
+                    ? "bg-white border-green-400"
+                    : "bg-green-400 border-black"
+                }  border `}
+              >
+                лайкнуть
+              </button>
+              <button
+                onClick={futureShow}
+                className={`p-2 mr-2 ${
+                  future
+                    ? "bg-white border-yellow-400"
+                    : "bg-yellow-400 border-black"
+                }  border `}
+              >
+                отложить
+              </button>
+              <button
+                onClick={watchedShow}
+                className={`p-2 ${
+                  watched
+                    ? "bg-white border-blue-400"
+                    : "bg-blue-400 border-black"
+                }  border `}
+              >
+                просмотрено
+              </button>
             </div>
             {playlist.at(-1) ? (
               <div className="p-6">
