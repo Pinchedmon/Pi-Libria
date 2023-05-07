@@ -6,7 +6,8 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, getDocs, collection } from "firebase/firestore";
+
 type context = {
   signUp: () => void;
   logIn: () => void;
@@ -14,10 +15,9 @@ type context = {
   user: any;
 };
 const AuthContext = createContext<any>(null);
-
 export function AuthContextProvider({ children }: any) {
   const [user, setUser] = useState({});
-
+  const [store, setStore] = useState<any>();
   function signUp(email: string, password: string) {
     createUserWithEmailAndPassword(auth, email, password);
     setDoc(doc(db, "users", email), {
@@ -26,6 +26,13 @@ export function AuthContextProvider({ children }: any) {
       futureShows: [],
     });
   }
+  const getCollection = async () => {
+    const citiesRef = collection(db, "users");
+    const docsSnap = await getDocs(citiesRef);
+    docsSnap.forEach((doc) => {
+      setStore(doc.data());
+    });
+  };
 
   function logIn(email: string, password: string) {
     return signInWithEmailAndPassword(auth, email, password);
@@ -34,7 +41,9 @@ export function AuthContextProvider({ children }: any) {
   function logOut() {
     return signOut(auth);
   }
-
+  useEffect(() => {
+    getCollection();
+  }, []);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
       setUser(currentUser);
@@ -45,7 +54,7 @@ export function AuthContextProvider({ children }: any) {
   });
 
   return (
-    <AuthContext.Provider value={{ signUp, logIn, logOut, user }}>
+    <AuthContext.Provider value={{ signUp, logIn, logOut, user, store }}>
       {children}
     </AuthContext.Provider>
   );

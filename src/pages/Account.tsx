@@ -1,7 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import { UserAuth } from "../context/AuthContext";
-import { getDocs, collection } from "firebase/firestore";
-import { db } from "../firebase";
 
 import { useNavigate } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,24 +7,11 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper";
 const Account = () => {
-  const { user } = UserAuth();
-  const [data, setData] = useState<any>();
+  const { user, store } = UserAuth();
   const navigate = useNavigate();
-  const getCollection = async () => {
-    const citiesRef = collection(db, "users");
-    const docsSnap = await getDocs(citiesRef);
-    docsSnap.forEach((doc) => {
-      setData(doc.data());
-    });
-  };
-  useEffect(() => {
-    getCollection();
-  }, []);
-  console.log(data);
-
   return (
     <div className="relative">
-      {data && (
+      {store && (
         <>
           <div className="flex flex-col  mr-4">
             <div className="ml-2 mb-2 sm:mb-4 bg-blue-200/40 backdrop-blur-lg border border-black w-full h-full">
@@ -36,13 +21,13 @@ const Account = () => {
                 </div>
 
                 <div className="text-gray-200 ">
-                  Просмотрено: {Object.keys(data.watchedShows).length}
+                  Просмотрено: {Object.keys(store.watchedShows).length}
                 </div>
                 <div className="text-gray-200">
-                  Отложено: {Object.keys(data.futureShows).length}
+                  Отложено: {Object.keys(store.futureShows).length}
                 </div>
                 <div className="text-gray-200">
-                  В любимых: {Object.keys(data.likedShows).length}
+                  В любимых: {Object.keys(store.likedShows).length}
                 </div>
               </div>
             </div>
@@ -58,7 +43,7 @@ const Account = () => {
                   }}
                   modules={[Pagination]}
                 >
-                  {data.futureShows.map((item: any, index: string) => (
+                  {store.futureShows.map((item: any, index: string) => (
                     <SwiperSlide>
                       <div className="w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2">
                         <img
@@ -89,7 +74,7 @@ const Account = () => {
                   }}
                   modules={[Pagination]}
                 >
-                  {data.watchedShows.map((item: any, index: string) => (
+                  {store.watchedShows.map((item: any, index: string) => (
                     <SwiperSlide>
                       <div className="w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2">
                         <img
@@ -121,7 +106,7 @@ const Account = () => {
                   }}
                   modules={[Pagination]}
                 >
-                  {data.likedShows.map((item: any, index: string) => (
+                  {store.likedShows.map((item: any, index: string) => (
                     <SwiperSlide>
                       <div className="w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2">
                         <img

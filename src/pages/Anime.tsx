@@ -9,13 +9,23 @@ import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 const Anime = () => {
-  const { user } = UserAuth();
+  const { user, store } = UserAuth();
   const location = useLocation();
   const [movie, setMovie] = useState<Imovie>();
   const [value, setValue] = useState<any>({ value: "1", label: "1" });
-  const [like, setLike] = useState(false);
-  const [future, setFuture] = useState(false);
-  const [watched, setWatched] = useState(false);
+  const [like, setLike] = useState(
+    store?.likedShows.find((item: any) => item?.id === movie?.id)?.id ===
+      movie?.id
+  );
+
+  const [future, setFuture] = useState(
+    store?.futureShows.find((item: any) => item?.id === movie?.id)?.id ===
+      movie?.id
+  );
+  const [watched, setWatched] = useState(
+    store?.watchedShows.find((item: any) => item?.id === movie?.id)?.id ===
+      movie?.id
+  );
   const playerRef = React.useRef(null);
   const movieId = doc(db, "users", `${user?.email}`);
 
