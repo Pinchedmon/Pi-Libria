@@ -13,19 +13,36 @@ const Anime = () => {
   const location = useLocation();
   const [movie, setMovie] = useState<Imovie>();
   const [value, setValue] = useState<any>({ value: "1", label: "1" });
-  const [like, setLike] = useState(
-    store?.likedShows.find((item: any) => item?.id === movie?.id)?.id ===
-      movie?.id
-  );
+  useEffect(() => {
+    axios
+      .get(
+        `https://api.anilibria.tv/v2/getTitle?id=${location.search.slice(
+          4,
+          location.search.length
+        )}`
+      )
+      .then((response) => {
+        setMovie(response.data);
+      });
+  }, []);
+  const [like, setLike] = useState(false);
+  const [future, setFuture] = useState(false);
+  const [watched, setWatched] = useState(false);
 
-  const [future, setFuture] = useState(
-    store?.futureShows.find((item: any) => item?.id === movie?.id)?.id ===
-      movie?.id
-  );
-  const [watched, setWatched] = useState(
-    store?.watchedShows.find((item: any) => item?.id === movie?.id)?.id ===
-      movie?.id
-  );
+  useEffect(() => {
+    setFuture(
+      store?.futureShows.find((item: any) => item.id === movie?.id)?.id ===
+        movie?.id
+    );
+    setWatched(
+      store?.watchedShows.find((item: any) => item.id === movie?.id)?.id ===
+        movie?.id
+    );
+    setLike(
+      store?.likedShows.find((item: any) => item.id === movie?.id)?.id ===
+        movie?.id
+    );
+  }, [movie, store]);
   const playerRef = React.useRef(null);
   const movieId = doc(db, "users", `${user?.email}`);
 
@@ -115,22 +132,9 @@ const Anime = () => {
     }
   };
 
-  useEffect(() => {
-    axios
-      .get(
-        `https://api.anilibria.tv/v2/getTitle?id=${location.search.slice(
-          4,
-          location.search.length
-        )}`
-      )
-      .then((response) => {
-        setMovie(response.data);
-      });
-  }, []);
-
   return (
     <div className="relative">
-      {movie && (
+      {movie && store && (
         <>
           <div className="bg-black/40 backdrop-blur-sm pb-4  border border-black ml-[16px] mr-[16px]">
             <div className="flex flex-col justify-center sm:flex-row h-full pt-6 pl-6 pr-6">

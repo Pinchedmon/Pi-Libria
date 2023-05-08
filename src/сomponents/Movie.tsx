@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Imovie } from "../types/Imovie";
 import { useNavigate } from "react-router-dom";
@@ -12,8 +12,14 @@ const Movie = ({ item }: props) => {
   const [like, setLike] = useState(false);
 
   const navigate = useNavigate();
-  const { user } = UserAuth();
+  const { user, store } = UserAuth();
   const movieId = doc(db, "users", `${user?.email}`);
+  useEffect(() => {
+    setLike(
+      store?.likedShows.find((movie: any) => movie.id === item?.id)?.id ===
+        item?.id
+    );
+  }, [store, item]);
 
   const likeShow = async () => {
     if (user?.email) {
